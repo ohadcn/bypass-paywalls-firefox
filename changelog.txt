@@ -1,4 +1,5 @@
 Updates--
+2018-04-23 v1.2.3: Fixed The Marker (themarker.com)
 2018-04-23 v1.2.2: Fixed The English Version of Haaretz website (haaretz.com)
 2018-04-07 v1.2.1: Fixed The Economist (economist.com)
 2018-04-05 v1.2.0: Added dark theme icon (thanks to Geoffrey De Belie), added Corriere Della Sera (corriere.it), added Dagens Nyheter (dn.se), fixed The Age (theage.com.au)
