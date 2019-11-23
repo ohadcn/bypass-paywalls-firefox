@@ -139,11 +139,17 @@ if (window.location.href.indexOf('parool.nl') !== -1 || window.location.href.ind
 if (window.location.href.indexOf('lemonde.fr') !== -1) {
   document.addEventListener('DOMContentLoaded', () => {
     const hidden_section = document.getElementsByClassName('article__content--restricted-media')[0]
-    if (hidden_section) { hidden_section.classList.remove('article__content--restricted-media') }
+    if (hidden_section) {
+      hidden_section.classList.remove('article__content--restricted-media')
+    }
     const longform_article_restricted = document.getElementsByClassName('article__content--restricted')[0]
-    if (longform_article_restricted) { longform_article_restricted.classList.remove('article__content--restricted') }
+    if (longform_article_restricted) {
+      longform_article_restricted.classList.remove('article__content--restricted')
+    }
     const longform_paywall = document.getElementsByClassName('paywall--longform')[0]
-    if (longform_paywall) { longform_paywall.classList.remove('paywall--longform') }
+    if (longform_paywall) {
+      longform_paywall.classList.remove('paywall--longform')
+    }
     const paywall = document.getElementById('js-paywall-content')
     const friend_paywall = document.getElementsByClassName('friend--paywall')[0]
     const cookie_banner = document.getElementById('cookie-banner')
@@ -153,7 +159,9 @@ if (window.location.href.indexOf('lemonde.fr') !== -1) {
 
 if (window.location.href.indexOf('nytimes.com') !== -1) {
   const preview_button = document.querySelector('.css-3s1ce0')
-  if (preview_button) { preview_button.click() }
+  if (preview_button) {
+    preview_button.click()
+  }
 }
 
 if (window.location.href.indexOf('caixinglobal.com') !== -1) {
@@ -166,13 +174,13 @@ if (window.location.href.indexOf('caixinglobal.com') !== -1) {
   }
 }
 
-function removeDOMElement (...elements) {
+function removeDOMElement(...elements) {
   for (const element of elements) {
     if (element) element.remove()
   }
 }
 
-function removeClassesByPrefix (el, prefix) {
+function removeClassesByPrefix(el, prefix) {
   for (let i = el.classList.length - 1; i >= 0; i--) {
     if (el.classList[i].startsWith(prefix)) {
       el.classList.remove(el.classList[i])
@@ -180,7 +188,7 @@ function removeClassesByPrefix (el, prefix) {
   }
 }
 
-function pageContains (selector, text) {
+function pageContains(selector, text) {
   const elements = document.querySelectorAll(selector)
   return Array.prototype.filter.call(elements, function (element) {
     return RegExp(text).test(element.textContent)

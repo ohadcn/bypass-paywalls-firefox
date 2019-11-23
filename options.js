@@ -125,7 +125,7 @@ function save_options() {
   var inputEls = document.querySelectorAll('#bypass_sites input');
   var sites = {};
 
-  var sites = Array.from(inputEls).reduce(function(memo, inputEl) {
+  var sites = Array.from(inputEls).reduce(function (memo, inputEl) {
     if (inputEl.checked) {
       memo[inputEl.dataset.key] = inputEl.dataset.value;
     }
@@ -134,11 +134,11 @@ function save_options() {
 
   browser.storage.sync.set({
     sites: sites
-  }, function() {
+  }, function () {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
-     status.textContent = 'Options saved.';
-    setTimeout(function() {
+    status.textContent = 'Options saved.';
+    setTimeout(function () {
       // status.textContent = '';
       window.close();
     }, 500);
@@ -150,7 +150,7 @@ function save_options() {
 function renderOptions() {
   browser.storage.sync.get({
     sites: {}
-  }, function(items) {
+  }, function (items) {
     var sites = items.sites;
     var sitesEl = document.getElementById('bypass_sites');
     for (var key in defaultSites) {
@@ -167,7 +167,7 @@ function renderOptions() {
       inputEl.checked = (key in sites) || (key.replace(/\s\(.*\)/, '') in sites);
 
       labelEl.appendChild(inputEl);
-      labelEl.appendChild(document.createTextNode(' '+key));
+      labelEl.appendChild(document.createTextNode(' ' + key));
       sitesEl.appendChild(labelEl);
     }
   });
@@ -175,14 +175,14 @@ function renderOptions() {
 
 function selectAll() {
   var inputEls = Array.from(document.querySelectorAll('input'));
-  inputEls.forEach(function(inputEl) {
+  inputEls.forEach(function (inputEl) {
     inputEl.checked = true;
   });
 }
 
 function selectNone() {
   var inputEls = Array.from(document.querySelectorAll('input'));
-  inputEls.forEach(function(inputEl) {
+  inputEls.forEach(function (inputEl) {
     inputEl.checked = false;
   });
 }
@@ -191,4 +191,3 @@ document.addEventListener('DOMContentLoaded', renderOptions);
 document.getElementById('save').addEventListener('click', save_options);
 document.getElementById('select-all').addEventListener('click', selectAll);
 document.getElementById('select-none').addEventListener('click', selectNone);
-

@@ -208,17 +208,17 @@ const remove_cookies = [
 
 // select specific cookie(s) to hold from remove_cookies domains
 const remove_cookies_select_hold = {
-	'nrc.nl': ['nmt_closed_cookiebar'],
-	'washingtonpost.com': ['wp_gdpr'],
-	'wsj.com': ['wsjregion']
+  'nrc.nl': ['nmt_closed_cookiebar'],
+  'washingtonpost.com': ['wp_gdpr'],
+  'wsj.com': ['wsjregion']
 }
 
 // select only specific cookie(s) to drop from remove_cookies domains
 const remove_cookies_select_drop = {
-	'ad.nl': ['temptationTrackingId'],
-	'demorgen.be': ['TID_ID'],
-	'ed.nl': ['temptationTrackingId'],
-	'nrc.nl': ['counter']
+  'ad.nl': ['temptationTrackingId'],
+  'demorgen.be': ['TID_ID'],
+  'ed.nl': ['temptationTrackingId'],
+  'nrc.nl': ['counter']
 }
 
 // Override User-Agent with Googlebot
@@ -240,16 +240,16 @@ const use_google_bot = [
 function setDefaultOptions() {
   browser.storage.sync.set({
     sites: defaultSites
-  }, function() {
+  }, function () {
     browser.runtime.openOptionsPage();
   });
 }
 
 const blockedRegexes = [
-/.+:\/\/.+\.tribdss\.com\//,
-/thenation\.com\/.+\/paywall-script\.php/,
-/haaretz\.co\.il\/htz\/js\/inter\.js/,
-/nzherald\.co\.nz\/.+\/headjs\/.+\.js/
+  /.+:\/\/.+\.tribdss\.com\//,
+  /thenation\.com\/.+\/paywall-script\.php/,
+  /haaretz\.co\.il\/htz\/js\/inter\.js/,
+  /nzherald\.co\.nz\/.+\/headjs\/.+\.js/
 ];
 
 const userAgentDesktop = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
@@ -260,21 +260,21 @@ var enabledSites = [];
 // Get the enabled sites
 browser.storage.sync.get({
   sites: {}
-}, function(items) {
+}, function (items) {
   var sites = items.sites;
-  enabledSites = Object.keys(items.sites).map(function(key) {
+  enabledSites = Object.keys(items.sites).map(function (key) {
     return items.sites[key];
   });
 });
 
 // Listen for changes to options
-browser.storage.onChanged.addListener(function(changes, namespace) {
+browser.storage.onChanged.addListener(function (changes, namespace) {
   var key;
   for (key in changes) {
     var storageChange = changes[key];
     if (key === 'sites') {
       var sites = storageChange.newValue;
-      enabledSites = Object.keys(sites).map(function(key) {
+      enabledSites = Object.keys(sites).map(function (key) {
         return sites[key];
       });
     }
@@ -282,7 +282,7 @@ browser.storage.onChanged.addListener(function(changes, namespace) {
 });
 
 // Set and show default options on install
-browser.runtime.onInstalled.addListener(function(details) {
+browser.runtime.onInstalled.addListener(function (details) {
   if (details.reason == "install") {
     setDefaultOptions();
   } else if (details.reason == "update") {
@@ -316,26 +316,31 @@ browser.webRequest.onBeforeSendHeaders.addListener(function(details) {
 **/
 
 // Disable javascript for these sites
-chrome.webRequest.onBeforeRequest.addListener(function(details) {
-  if (!isSiteEnabled(details) || details.url.indexOf("mod=rsswn") !== -1) {
-    return;
-  }
-  return {cancel: true};
-  },
-  {
+chrome.webRequest.onBeforeRequest.addListener(function (details) {
+    if (!isSiteEnabled(details) || details.url.indexOf("mod=rsswn") !== -1) {
+      return;
+    }
+    return {
+      cancel: true
+    };
+  }, {
     urls: ["*://*.theglobeandmail.com/*", "*://*.economist.com/*", "*://*.thestar.com/*", "*://*.newstatesman.com/*", "*://*.bostonglobe.com/*", "*://*.afr.com/*"],
     types: ["script"]
   },
   ["blocking"]
 );
 
-browser.webRequest.onBeforeSendHeaders.addListener(function(details) {
+browser.webRequest.onBeforeSendHeaders.addListener(function (details) {
   if (!isSiteEnabled(details)) {
     return;
   }
 
-  if (blockedRegexes.some(function(regex) { return regex.test(details.url); })) {
-    return { cancel: true };
+  if (blockedRegexes.some(function (regex) {
+      return regex.test(details.url);
+    })) {
+    return {
+      cancel: true
+    };
   }
 
   var requestHeaders = details.requestHeaders;
@@ -345,7 +350,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(function(details) {
   var setReferer = false;
 
   // if referer exists, set it to google
-  requestHeaders = requestHeaders.map(function(requestHeader) {
+  requestHeaders = requestHeaders.map(function (requestHeader) {
     if (requestHeader.name === 'Referer') {
       if (details.url.indexOf("cooking.nytimes.com/api/v1/users/bootstrap") !== -1) {
         // this fixes images not being loaded on cooking.nytimes.com main page
@@ -381,7 +386,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(function(details) {
   }
 
   // override User-Agent to use Googlebot
-  var useGoogleBot = use_google_bot.filter(function(item) {
+  var useGoogleBot = use_google_bot.filter(function (item) {
     return typeof item == 'string' && details.url.indexOf(item) > -1;
   }).length > 0;
 
@@ -397,7 +402,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(function(details) {
   }
 
   // remove cookies before page load
-  requestHeaders = requestHeaders.map(function(requestHeader) {
+  requestHeaders = requestHeaders.map(function (requestHeader) {
     for (var siteIndex in allow_cookies) {
       if (details.url.indexOf(allow_cookies[siteIndex]) !== -1) {
         return requestHeader;
@@ -414,27 +419,31 @@ browser.webRequest.onBeforeSendHeaders.addListener(function(details) {
     browser.tabs.executeScript(tabId, {
       file: 'contentScript.js',
       runAt: 'document_start'
-    }, function(res) {
+    }, function (res) {
       if (browser.runtime.lastError || res[0]) {
         return;
       }
     });
   }
 
-  return { requestHeaders: requestHeaders };
+  return {
+    requestHeaders: requestHeaders
+  };
 }, {
   urls: ['<all_urls>']
 }, ['blocking', 'requestHeaders']);
 
 // remove cookies after page load
-browser.webRequest.onCompleted.addListener(function(details) {
+browser.webRequest.onCompleted.addListener(function (details) {
   for (var domainIndex in remove_cookies) {
     var domainVar = remove_cookies[domainIndex];
     if (!enabledSites.includes(domainVar) || details.url.indexOf(domainVar) === -1) {
       continue; // don't remove cookies
     }
-    browser.cookies.getAll({domain: domainVar}, function(cookies) {
-      for (var i=0; i<cookies.length; i++) {
+    browser.cookies.getAll({
+      domain: domainVar
+    }, function (cookies) {
+      for (var i = 0; i < cookies.length; i++) {
         var cookie = {
           url: (cookies[i].secure ? "https://" : "http://") + cookies[i].domain + cookies[i].path,
           name: cookies[i].name,
@@ -444,16 +453,16 @@ browser.webRequest.onCompleted.addListener(function(details) {
           cookie.firstPartyDomain = cookies[i].firstPartyDomain;
         }
 
-		var cookie_domain = cookies[i].domain;
-		var rc_domain = cookie_domain.replace(/^(\.?www\.|\.)/, '');
-		// hold specific cookie(s) from remove_cookies domains
-		if ((rc_domain in remove_cookies_select_hold) && remove_cookies_select_hold[rc_domain].includes(cookies[i].name)){
-			continue; // don't remove specific cookie
-		}
-		// drop only specific cookie(s) from remove_cookies domains
-		if ((rc_domain in remove_cookies_select_drop) && !(remove_cookies_select_drop[rc_domain].includes(cookies[i].name))){
-			continue; // only remove specific cookie
-		}
+        var cookie_domain = cookies[i].domain;
+        var rc_domain = cookie_domain.replace(/^(\.?www\.|\.)/, '');
+        // hold specific cookie(s) from remove_cookies domains
+        if ((rc_domain in remove_cookies_select_hold) && remove_cookies_select_hold[rc_domain].includes(cookies[i].name)) {
+          continue; // don't remove specific cookie
+        }
+        // drop only specific cookie(s) from remove_cookies domains
+        if ((rc_domain in remove_cookies_select_drop) && !(remove_cookies_select_drop[rc_domain].includes(cookies[i].name))) {
+          continue; // only remove specific cookie
+        }
 
         browser.cookies.remove(cookie);
       }
@@ -464,7 +473,7 @@ browser.webRequest.onCompleted.addListener(function(details) {
 });
 
 function isSiteEnabled(details) {
-  var isEnabled = enabledSites.some(function(enabledSite) {
+  var isEnabled = enabledSites.some(function (enabledSite) {
     var useSite = details.url.indexOf("." + enabledSite) !== -1;
     if (enabledSite in restrictions) {
       return useSite && details.url.indexOf(restrictions[enabledSite]) !== -1;
@@ -478,7 +487,7 @@ function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
   var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-  results = regex.exec(url);
+    results = regex.exec(url);
   if (!results) return null;
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
