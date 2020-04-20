@@ -64,6 +64,7 @@ const remove_cookies = [
 'ed.nl',
 'examiner.com.au',
 'ft.com',
+'globes.co.il',
 'hacked.com',
 'harpers.org',
 'hbr.org',

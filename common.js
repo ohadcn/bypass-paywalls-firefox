@@ -25,6 +25,7 @@ const defaultSites = {
     'Foreign Policy': 'foreignpolicy.com',
     'Fortune': 'fortune.com',
     'Glassdoor': 'glassdoor.com',
+    'Globes': 'globes.co.il',
     'Haaretz': 'haaretz.co.il',
     'Haaretz English': 'haaretz.com',
     'Handelsblatt': 'handelsblatt.com',
